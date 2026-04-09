@@ -1,0 +1,29 @@
+### Get all users
+GET http://localhost:3000/api/get_users
+
+### Get user by username
+GET http://localhost:3000/api/get_user_by_username?username=alice
+
+### Get all tweets
+GET http://localhost:3000/api/get_tweets
+
+### Get tweets by user
+GET http://localhost:3000/api/get_tweets_by_username?username=alice
+
+### Get feed (tweets from people current user follows)
+GET http://localhost:3000/api/get_feed
+
+### Create a tweet (PostUrl = form-encoded, not JSON)
+POST http://localhost:3000/api/post_tweet
+Content-Type: application/x-www-form-urlencoded
+
+content=Hello from the API!
+
+### Delete a tweet (replace with a real tweet ID)
+GET http://localhost:3000/api/delete_tweet?id=00000000-0000-0000-0000-000000000099
+
+### Toggle follow (following_id only — follower comes from current_user_id in AppState)
+POST http://localhost:3000/api/toggle_follow
+Content-Type: application/x-www-form-urlencoded
+
+following_id=00000000-0000-0000-0000-000000000003

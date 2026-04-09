@@ -1,0 +1,46 @@
+zerops:
+  - setup: app
+    # ==== BUILD ====
+    build:
+      base: rust@nightly
+
+      prepareCommands:
+        - curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+        - cargo binstall cargo-leptos --no-confirm
+        - rustup target add wasm32-unknown-unknown
+
+
+      envVariables:
+        SQLX_OFFLINE: "true"
+
+      buildCommands:
+        - cargo leptos build --release 2>&1
+
+      deployFiles:
+        - target/release/~server
+        - target/site/~
+
+      cache: target
+
+    # ==== RUN ====
+    run:
+      base: rust@nightly
+
+      ports:
+        - port: 3000
+          httpSupport: true
+
+      envVariables:
+        RUST_LOG: info
+        LEPTOS_SITE_ADDR: 0.0.0.0:3000
+        LEPTOS_SITE_ROOT: /var/www
+        LEPTOS_SITE_PKG_DIR: pkg
+        LEPTOS_OUTPUT_NAME: twitter_clone_fullstack
+        DATABASE_URL: ${postgresql_connectionString}
+
+      start: ./server
+
+      healthCheck:
+        httpGet:
+          port: 3000
+          path: /

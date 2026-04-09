@@ -1,0 +1,65 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                WITH inserted AS (\n                    INSERT INTO tweets (author_id, content)\n                    VALUES ($1, $2)\n                    RETURNING *\n                )\n                SELECT i.id, i.author_id, i.content, i.created_at,\n                       u.username AS author_username,\n                       u.display_name AS author_display_name,\n                       u.avatar_url AS author_avatar_url,\n                       (i.author_id = $1) AS \"is_mine!: bool\"\n                FROM inserted i\n                JOIN users u ON u.id = i.author_id\n                ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "author_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "content",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 4,
+        "name": "author_username",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "author_display_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "author_avatar_url",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "is_mine!: bool",
+        "type_info": "Bool"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      null
+    ]
+  },
+  "hash": "a950f563f011bd247af1b696203f51d624751729653d718cd92fe3574ffd8d89"
+}

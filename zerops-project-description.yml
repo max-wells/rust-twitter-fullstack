@@ -1,0 +1,36 @@
+# Zerops project import YAML
+# Usage:
+#   zcli project project-import zerops-project-description.yml
+#   or paste into Zerops GUI > Import a project
+
+project:
+  name: twitter-clone-fullstack
+  description: "Leptos + Axum full-stack Rust app"
+  corePackage: LIGHT
+  tags:
+    - rust
+    - leptos
+    - dev
+
+services:
+  - hostname: db
+    type: postgresql@16
+    mode: NON_HA
+    priority: 1
+
+  - hostname: app
+    type: rust@nightly
+    mode: NON_HA
+    enableSubdomainAccess: true
+
+    verticalAutoscaling:
+      minCpu: 1
+      maxCpu: 2
+      cpuMode: SHARED
+      minRam: 0.5
+      maxRam: 4
+      minDisk: 1
+      maxDisk: 10
+
+    minContainers: 1
+    maxContainers: 1
