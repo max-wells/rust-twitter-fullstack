@@ -1,5 +1,5 @@
 # Build stage: compile the Rust/Leptos app
-FROM rust:nightly AS builder
+FROM rust:nightly-bookworm AS builder
 
 WORKDIR /app
 
