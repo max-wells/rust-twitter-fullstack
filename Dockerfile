@@ -1,9 +1,9 @@
 # Build stage: compile the Rust/Leptos app
-FROM rust:nightly-bookworm AS builder
+FROM rust:bookworm AS builder
 
 WORKDIR /app
 
-# System dependencies: node + pnpm for Tailwind CSS, curl for cargo-leptos
+# System dependencies: node + pnpm for Tailwind CSS
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
@@ -15,9 +15,12 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && npm install -g pnpm@9 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install cargo-leptos and the WASM target (pinned by rust-toolchain.toml)
-RUN cargo install cargo-leptos \
-    && rustup target add wasm32-unknown-unknown
+# Install the nightly toolchain (required by rust-toolchain.toml), the WASM target,
+# and cargo-leptos for building the Leptos app.
+RUN rustup toolchain install nightly --profile minimal \
+    && rustup default nightly \
+    && rustup target add wasm32-unknown-unknown \
+    && cargo install cargo-leptos
 
 # SQLx query macros are verified against the cached .sqlx/ metadata,
 # so a live database is not required at build time.
