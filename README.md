@@ -36,6 +36,31 @@ just run_android    # For Android
 ```
 
 
+## Run with Docker
+
+The easiest way to run the full stack (app + Postgres) without installing Rust,
+Tauri, or PostgreSQL locally:
+
+```bash
+# Build and start the app and database
+docker compose up --build
+
+# The app is then available at http://localhost:3000
+# Postgres is available at localhost:5432
+
+# Stop and remove containers
+docker compose down
+
+# To reset the database volume (drops all data)
+docker compose down -v
+```
+
+The `app` service runs database migrations automatically on startup, so the
+database is seeded with sample data on first launch. The `DATABASE_URL` is set
+by `docker-compose.yml` to point at the `db` service, overriding the local
+`127.0.0.1` value in `.env`.
+
+
 ## Deploy with Zerops
 
 Install the CLI:
